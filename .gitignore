@@ -72,3 +72,4 @@ gen
 
 package-lock.json
 notebooks/
+/config.js

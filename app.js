@@ -4,6 +4,8 @@ const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const fs = require('fs');
 
+import config from "config";
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -58,6 +60,24 @@ app.post("/login", (req, res)=>{ //TODO 正式登录
     res.statusCode = 200;
     res.json({id: "0000000000000000000000000000"}); //28个
     res.end();
+});
+// 真的 POST /login
+app.post("/login",(req, res)=>{
+    let wx_req = http.get(
+        "https://api.weixin.qq.com/sns/jscode2session?appid=" + config.app_id +
+        "&secret=" + config.app_secret +
+        "&grant_type=authorization_code&js_code=code",
+        function(req,res){
+        req.on('data',function(data){
+            console.log(data);
+            res.statusCode = 200;
+            res.json({id:""});
+            res.end();
+        });
+    });
+    /*
+    https://api.weixin.qq.com/sns/jscode2session?appid=appid&secret=app_sectet&grant_type=authorization_code&js_code=code
+     */
 });
 
 // PUT /history            openid,word->记录数据库
