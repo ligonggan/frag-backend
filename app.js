@@ -50,7 +50,7 @@ function checkUserId(res,userId){
 }
 
 function notebookName(userId) {
-    return repo + userId + ".json";
+    return repo + userId + ".txt";
 }
 
 // POST /login      code->openid
@@ -98,7 +98,6 @@ app.put("/history", (req, res)=>{
 app.post("/history", (req, res)=>{
     let params = checkFields(req,res, ["userId"]);
     if (params !== null && checkUserId(res,params.userId)) {
-        // 将word加入id的历史
         pool.query("SELECT history FROM history WHERE user_id = ?", [params.userId], (error, results, fields)=>{
             if (error) {
                 console.log(error);
@@ -121,14 +120,20 @@ app.post("/notebooks", (req,res)=>{
         let notebook = notebookName(params.userId);
         fs.readFile(repo + notebook, (error, data)=>{
             if (error) {
-                console.log(error);
-                res.statusCode = 404; // TODO 判别出错和没找到
+                if (error.code === "ENOENT") { // 未找到
+                    res.statusCode = 200;
+                    res.json([]);
+                    res.end();
+                } else {
+                    console.log(error);
+                    res.statusCode = 500;
+                    res.end();
+                }
+            } else {
+                res.statusCode = 200;
+                res.json(data.split('\n'));
                 res.end();
-                return;
             }
-            res.statusCode = 200;
-            res.json(data.split('\n'));
-            res.end();
         });
     }
 });
@@ -139,15 +144,28 @@ app.put("/notebooks/:word", (req,res)=>{
     if (params !== null && checkUserId(res,params.userId)) {
         let notebook = notebookName(params.userId);
         fs.readFile(notebook, (error, data)=>{
+            var words;
             if (error) {
-                console.log(error);
-                res.statusCode = 500;
-                res.end();
-                return;
+                if (error.code === "ENOENT") {
+                    words = [];
+                } else {
+                    console.log(error);
+                    res.statusCode = 500;
+                    res.end();
+                    return;
+                }
+            } else {
+                words = data.toString().split('\n');
+                var index;
+                if ((index = words.findIndex((value, index, obj)=>(value === req.params.word))) !== -1) {
+                    res.statusCode = 201;
+                    res.json({msg: "created"});
+                    res.end();
+                    return;
+                }
             }
-            let words = data.split('\n');
-            words.append(req.params.word);
-            fs.writeFile(notebook, words.join('\n'), 'w', (error)=>{
+            words.push(req.params.word);
+            fs.writeFile(notebook, words.join('\n'), (error)=>{
                 if (error) {
                     console.log(error);
                     res.statusCode = 500;
@@ -168,24 +186,30 @@ app.post("/notebooks/delete/:word", (req,res)=>{
     if (params !== null && checkUserId(res,params.userId)) {
         let notebook = notebookName(params.userId);
         fs.readFile(notebook, (error, data)=>{
-            if (error) { // TODO 区分没找到
+            if (error) {
+                if (error.code === "ENOENT") {
+                    res.statusCode = 204;
+                    res.json({msg:"not found"});
+                    res.end();
+                    return;
+                }
                 console.log(error);
                 res.statusCode = 500;
                 res.end();
                 return;
             }
-            let words = data.split('\n');
+            let words = data.toString().split('\n');
             words.splice(words.findIndex((value, index, obj)=>(value === params.word)), 1);
-            fs.writeFile(notebook, words.join('\n'), 'w', (error)=>{
+            fs.writeFile(notebook, words.join('\n'), (error)=>{
                 if (error) {
                     console.log(error);
                     res.statusCode = 500;
                     res.end();
-                    return;
+                } else {
+                    res.statusCode = 204;
+                    res.json({msg: "no content"});
+                    res.end();
                 }
-                res.statusCode = 204;
-                res.json({msg:"no content"});
-                res.end();
             });
         });
     }
@@ -203,9 +227,9 @@ app.post("/notebooks/exist/:word", (req,res)=>{
                 res.end();
                 return;
             }
-            let words = data.split('\n');
+            let words = data.toString().split('\n');
             res.statusCode = 200;
-            res.json({found:words.findIndex(req.params.word) !== -1,data:req.params.word});
+            res.json({found:words.findIndex(value=>value===req.params.word) !== -1,data:req.params.word});
             res.end();
         });
     }

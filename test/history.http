@@ -1,7 +1,7 @@
+# 日历相关API
+
 # API: POST /history
 # 取openid为userId的用户的历史
-
-# 说明：
 
 ### 正确示例
 
@@ -29,7 +29,7 @@ Content-Type: application/json; charset=utf-8
 PUT http://localhost:3001/history
 Content-Type: application/json; charset=utf-8
 
-{"userId":"0000000000000000000000000000","word":"a"}
+{"userId":"0000000000000000000000000000","word":"an"}
 
 ###
 

@@ -1,0 +1,100 @@
+# 生词本相关API
+
+# API: POST /notebooks
+# 查看openid为userId的用户的历史
+
+### 正确示例
+
+POST http://localhost:3001/notebooks
+Content-Type: application/json; charset=utf-8
+
+{"userId":"0000000000000000000000000000"}
+
+###
+
+# HTTP/1.1 200 OK
+# X-Powered-By: Express
+# Content-Type: application/json; charset=utf-8
+# Content-Length: 2
+# ETag: W/"2-l9Fw4VUO7kr8CvBlt4zaMCqXZ0w"
+# Date: Fri, 01 Jun 2018 15:02:20 GMT
+# Connection: keep-alive
+#
+# []
+#
+
+# API: PUT /notebooks/:word
+# 为openid为userId的用户将word加入生词本
+
+PUT http://localhost:3001/notebooks/a/
+Content-Type: application/json; charset=utf-8
+
+{"userId":"0000000000000000000000000000"}
+
+###  HTTP/1.1 201 Created
+   # X-Powered-By: Express
+   # Content-Type: application/json; charset=utf-8
+   # Content-Length: 17
+   # ETag: W/"11-HXdQV+XCIcjyNXgvBIk6FMoB5Jw"
+   # Date: Sat, 02 Jun 2018 07:09:37 GMT
+   # Connection: keep-alive
+   #
+   # {
+   #     "msg": "created"
+   # }
+
+# API: POST /notebooks/delete/:word
+# 为openid为userId的用户将word从生词本中删除
+
+POST http://localhost:3001/notebooks/delete/an
+Content-Type: application/json; charset=utf-8
+
+{"userId":"0000000000000000000000000000"}
+
+###  HTTP/1.1 204 No Content
+   # X-Powered-By: Express
+   # ETag: W/"14-ATGS/daw8F3GpE5AkO7kf1LILvg"
+   # Date: Sat, 02 Jun 2018 07:44:12 GMT
+   # Connection: keep-alive
+   #
+   # <Response body is empty>
+   #
+
+# API: POST /notebooks/exist/:word
+# 为openid为userId的用户判断word是否在生词本中
+
+POST http://localhost:3001/notebooks/exist/a
+Content-Type: application/json; charset=utf-8
+
+{"userId":"0000000000000000000000000000"}
+
+###  HTTP/1.1 200 OK
+   # X-Powered-By: Express
+   # Content-Type: application/json; charset=utf-8
+   # Content-Length: 25
+   # ETag: W/"19-9y+LX+YbWUnLT29e8Y0F2seRM9Y"
+   # Date: Sat, 02 Jun 2018 07:53:49 GMT
+   # Connection: keep-alive
+   #
+   # {
+   #     "found": true,
+   #     "data": "a"
+   # }
+
+POST http://localhost:3001/notebooks/exist/an
+Content-Type: application/json; charset=utf-8
+
+{"userId":"0000000000000000000000000000"}
+
+###  HTTP/1.1 200 OK
+   # X-Powered-By: Express
+   # Content-Type: application/json; charset=utf-8
+   # Content-Length: 27
+   # ETag: W/"1b-k14S+cvuWltNvtmRK3yedl1ozR4"
+   # Date: Sat, 02 Jun 2018 07:54:34 GMT
+   # Connection: keep-alive
+   #
+   # {
+   #     "found": false,
+   #     "data": "an"
+   # }
