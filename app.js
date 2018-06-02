@@ -56,7 +56,7 @@ function notebookName(userId) {
 }
 
 // POST /login      code->openid
-app.post("/fake_login", (req, res)=>{ //TODO 正式登录
+app.post("/fake_login", (req, res)=>{
     res.statusCode = 200;
     res.json({id: "0000000000000000000000000000"}); //28个
     res.end();
@@ -71,7 +71,7 @@ app.post("/login",(req, res)=>{
         req.on('data',function(data){
             console.log(data);
             res.statusCode = 200;
-            res.json({id:""});
+            res.json({id:"0000000000000000000000000000"});
             res.end();
         });
     });
@@ -253,6 +253,12 @@ app.post("/notebooks/exist/:word", (req,res)=>{
             res.end();
         });
     }
+});
+
+app.all("/*", (req,res)=>{
+    res.statusCode = 400;
+    res.json({error:"NO_SUCH_API"});
+    res.end();
 });
 
 http.createServer(app).listen(3001, function(){
