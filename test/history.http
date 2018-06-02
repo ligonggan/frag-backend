@@ -1,0 +1,46 @@
+# API: POST /history
+# 取openid为userId的用户的历史
+
+# 说明：
+
+### 正确示例
+
+POST http://localhost:3001/history
+Content-Type: application/json; charset=utf-8
+
+{"userId":"0000000000000000000000000000"}
+
+# HTTP/1.1 200 OK
+# X-Powered-By: Express
+# Content-Type: application/json; charset=utf-8
+# Content-Length: 2
+# ETag: W/"2-l9Fw4VUO7kr8CvBlt4zaMCqXZ0w"
+# Date: Fri, 01 Jun 2018 15:02:20 GMT
+# Connection: keep-alive
+#
+# []
+#
+
+# API: PUT /history
+# 为openid为userId的用户存放一条历史
+
+### 正确示例
+
+PUT http://localhost:3001/history
+Content-Type: application/json; charset=utf-8
+
+{"userId":"0000000000000000000000000000","word":"a"}
+
+###
+
+# HTTP/1.1 201 Created
+# X-Powered-By: Express
+# Content-Type: application/json; charset=utf-8
+# Content-Length: 17
+# ETag: W/"11-HXdQV+XCIcjyNXgvBIk6FMoB5Jw"
+# Date: Sat, 02 Jun 2018 03:23:03 GMT
+# Connection: keep-alive
+#
+# {
+#    "msg": "created"
+# }

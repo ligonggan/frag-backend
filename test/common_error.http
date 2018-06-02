@@ -1,0 +1,42 @@
+# 常见错误的响应
+
+### id出错
+
+POST http://localhost:3001/history
+Content-Type: application/json; charset=utf-8
+
+{"userId":".."}
+
+###
+# HTTP/1.1 400 Bad Request
+# X-Powered-By: Express
+# Content-Type: application/json; charset=utf-8
+# Content-Length: 26
+# ETag: W/"1a-ka2z19rb0YXQ+QgYT+U/4LcAGes"
+# Date: Sat, 02 Jun 2018 02:26:01 GMT
+# Connection: keep-alive
+#
+# {
+#    "error": "INVALID_USERID"
+# }
+
+### id未传入
+#! 注意！如果不写Content-Type也会这样！
+
+POST http://localhost:3001/history
+Content-Type: application/json; charset=utf-8
+
+###
+
+# HTTP/1.1 400 Bad Request
+# X-Powered-By: Express
+# Content-Type: application/json; charset=utf-8
+# Content-Length: 40
+# ETag: W/"28-Z9gEr0eQc5FEPqoy9cJXfFy5ar4"
+# Date: Sat, 02 Jun 2018 02:43:52 GMT
+# Connection: keep-alive
+#
+# {
+#   "error": "MISSING_ARGS",
+#   "data": "userId"
+# }
