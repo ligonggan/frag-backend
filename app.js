@@ -270,6 +270,10 @@ app.post("/notebooks/exist/:word", (req,res)=>{
     }
 });
 
+app.get("/doc", (req,res)=>{
+    res.redirect(302, "https://github.com/ligonggan/frag-backend/tree/master/test");
+});
+
 app.all("/*", (req,res)=>{
     res.statusCode = 400;
     res.json({error:"NO_SUCH_API"});
