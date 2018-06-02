@@ -4,7 +4,7 @@ const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const fs = require('fs');
 
-import config from "config";
+const config = require("config");
 
 const app = express();
 app.use(bodyParser.json());
