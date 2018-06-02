@@ -4,7 +4,7 @@ const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const fs = require('fs');
 
-import config from "config";
+const {app_id, app_secret} = require("config");
 
 const app = express();
 app.use(bodyParser.json());
@@ -61,12 +61,13 @@ app.post("/fake_login", (req, res)=>{
     res.json({id: "0000000000000000000000000000"}); //28个
     res.end();
 });
+
 // 真的 POST /login
 app.post("/login",(req, res)=>{
     let wx_req = http.get(
-        "https://api.weixin.qq.com/sns/jscode2session?appid=" + config.app_id +
-        "&secret=" + config.app_secret +
-        "&grant_type=authorization_code&js_code=code",
+        "https://api.weixin.qq.com/sns/jscode2session?appid=" + app_id +
+        "&secret=" + app_secret +
+        "&grant_type=authorization_code&js_code=" + req.body.code,
         function(req,res){
         req.on('data',function(data){
             console.log(data);
@@ -75,9 +76,6 @@ app.post("/login",(req, res)=>{
             res.end();
         });
     });
-    /*
-    https://api.weixin.qq.com/sns/jscode2session?appid=appid&secret=app_sectet&grant_type=authorization_code&js_code=code
-     */
 });
 
 // PUT /history            openid,word->记录数据库
