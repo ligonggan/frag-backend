@@ -1,10 +1,11 @@
 const http = require("http");
+const https = require("https");
 const express = require("express");
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const fs = require('fs');
 
-const {app_id, app_secret} = require("config");
+const config = require("./config");
 
 const app = express();
 app.use(bodyParser.json());
@@ -64,18 +65,34 @@ app.post("/fake_login", (req, res)=>{
 
 // 真的 POST /login
 app.post("/login",(req, res)=>{
-    let wx_req = http.get(
-        "https://api.weixin.qq.com/sns/jscode2session?appid=" + app_id +
-        "&secret=" + app_secret +
-        "&grant_type=authorization_code&js_code=" + req.body.code,
-        function(req,res){
-        req.on('data',function(data){
-            console.log(data);
-            res.statusCode = 200;
-            res.json({id:"0000000000000000000000000000"});
-            res.end();
-        });
-    });
+    if (checkFields(req, res, ["code"])) {
+        https.get(
+            "https://api.weixin.qq.com/sns/jscode2session?appid=" + config.app_id +
+            "&secret=" + config.app_secret +
+            "&grant_type=authorization_code&js_code=" + req.body.code,
+            function (wx_res) {
+                wx_res.on('data', function (data) {
+                    const response = JSON.parse(data.toString());
+                    switch (response.errcode) {
+                    case 0:
+                        res.statusCode = 200;
+                        res.json({id: "0000000000000000000000000000"});
+                        res.end();
+                        break;
+                    case 40029:
+                        res.statusCode = 401;
+                        res.json({id: "",msg:"INVALID_CODE"});
+                        res.end();
+                        break;
+                    default:
+                        res.statusCode = 401;
+                        res.json({id: "",msg:"LOGIN_FAILED",code:response.errcode});
+                        res.end();
+                        break;
+                    }
+                });
+            });
+    }
 });
 
 // PUT /history            openid,word->记录数据库
