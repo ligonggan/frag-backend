@@ -15,7 +15,7 @@ const pool = mysql.createPool({
     port: 3306,
     database: "fragment",
     user: "fragment",
-    password: "TangCuLiJi123"
+    password: "TangCuLiJi&123"
 });
 
 const repo = "./notebooks/";
