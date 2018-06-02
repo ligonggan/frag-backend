@@ -56,7 +56,7 @@ function notebookName(userId) {
 }
 
 // POST /login      code->openid
-app.post("/login", (req, res)=>{ //TODO 正式登录
+app.post("/fake_login", (req, res)=>{ //TODO 正式登录
     res.statusCode = 200;
     res.json({id: "0000000000000000000000000000"}); //28个
     res.end();
