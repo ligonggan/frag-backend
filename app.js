@@ -256,13 +256,19 @@ app.post("/notebooks/exist/:word", (req,res)=>{
     if (params !== null && checkUserId(res,params.userId)) {
         let notebook = notebookName(params.userId);
         fs.readFile(notebook, (error, data)=>{
+            var words;
             if (error) {
-                console.log(error);
-                res.statusCode = 500;
-                res.end();
-                return;
+                if (error.code === "ENOENT") {
+                    words = [];
+                } else {
+                    console.log(error);
+                    res.statusCode = 500;
+                    res.end();
+                    return;
+                }
+            } else {
+                words = data.toString().split('\n');
             }
-            let words = data.toString().split('\n');
             res.statusCode = 200;
             res.json({found:words.findIndex(value=>value===req.params.word) !== -1,data:req.params.word});
             res.end();
