@@ -26,7 +26,7 @@ Content-Type: application/json; charset=utf-8
 # API: PUT /notebooks/:word
 # 为openid为userId的用户将word加入生词本
 
-PUT http://localhost:3001/notebooks/a/
+PUT http://localhost:3001/notebooks/banana
 Content-Type: application/json; charset=utf-8
 
 {"userId":"0000000000000000000000000000"}

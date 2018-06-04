@@ -153,16 +153,33 @@ app.post("/history", (req, res)=>{
     }
 });
 
+app.post("/history/delete", (req,res)=>{
+    let params = checkFields(req,res, ["userId"]);
+    if (params !== null && checkUserId(res,params.userId)) {
+        pool.query("DELETE FROM history WHERE user_id = ?", [params.userId], (error, results, fields)=>{
+            if (error) {
+                console.log(error);
+                res.statusCode = 500;
+                res.end();
+                return;
+            }
+            res.statusCode = 204;
+            res.json({msg: "no content"});
+            res.end();
+        });
+    }
+});
+
 // POST /notebooks           openid->获得单词本内生词列表
 app.post("/notebooks", (req,res)=>{
     let params = checkFields(req,res, ["userId"]);
     if (params !== null && checkUserId(res,params.userId)) {
         let notebook = notebookName(params.userId);
-        fs.readFile(repo + notebook, (error, data)=>{
+        fs.readFile(notebook, (error, data)=>{
             if (error) {
                 if (error.code === "ENOENT") { // 未找到
                     res.statusCode = 200;
-                    res.json([]);
+                    res.json({});
                     res.end();
                 } else {
                     console.log(error);
@@ -170,8 +187,19 @@ app.post("/notebooks", (req,res)=>{
                     res.end();
                 }
             } else {
+                let words = data.toString().split('\n');
+                let wordGroups = {};
+                for (var word in words) {
+                    if (words.hasOwnProperty(word)) {
+                        let initial = words[word].charAt(0).toLowerCase();
+                        if (wordGroups[initial] === undefined) {
+                            wordGroups[initial] = [];
+                        }
+                        wordGroups[initial].push(words[word]);
+                    }
+                }
                 res.statusCode = 200;
-                res.json(data.split('\n'));
+                res.json(wordGroups);
                 res.end();
             }
         });
@@ -204,7 +232,7 @@ app.put("/notebooks/:word", (req,res)=>{
                     return;
                 }
             }
-            words.push(req.params.word);
+            words.push(req.params.word).sort();
             fs.writeFile(notebook, words.join('\n'), (error)=>{
                 if (error) {
                     console.log(error);

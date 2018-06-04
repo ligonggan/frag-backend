@@ -13,13 +13,14 @@ Content-Type: application/json; charset=utf-8
 # HTTP/1.1 200 OK
 # X-Powered-By: Express
 # Content-Type: application/json; charset=utf-8
-# Content-Length: 2
-# ETag: W/"2-l9Fw4VUO7kr8CvBlt4zaMCqXZ0w"
-# Date: Fri, 01 Jun 2018 15:02:20 GMT
+# Content-Length: 37
+# ETag: W/"25-GYNnWFLHSGru06EBtI3N1HD3TR0"
+# Date: Mon, 04 Jun 2018 07:10:31 GMT
 # Connection: keep-alive
 #
-# []
-#
+# {"a":["a","abnormal"],"b":["banana"]}
+
+
 
 # API: PUT /history
 # 为openid为userId的用户存放一条历史
@@ -44,3 +45,24 @@ Content-Type: application/json; charset=utf-8
 # {
 #    "msg": "created"
 # }
+
+# API: POST /history/delete
+# 删除openid为userId的用户的历史
+
+### 正确示例
+
+POST http://localhost:3001/history/delete
+Content-Type: application/json; charset=utf-8
+
+{"userId":"0000000000000000000000000000"}
+
+###
+
+# HTTP/1.1 204 No Content
+# X-Powered-By: Express
+# ETag: W/"14-ATGS/daw8F3GpE5AkO7kf1LILvg"
+# Date: Mon, 04 Jun 2018 06:59:07 GMT
+# Connection: keep-alive
+#
+# <Response body is empty>
+#
