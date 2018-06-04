@@ -10,19 +10,34 @@ Content-Type: application/json; charset=utf-8
 
 {"userId":"0000000000000000000000000000"}
 
+### HTTP/1.1 200 OK
+  # X-Powered-By: Express
+  # Content-Type: application/json; charset=utf-8
+  # Content-Length: 25
+  # ETag: W/"19-26j8/Z7i7t5ofmYB0yPotyguWqM"
+  # Date: Mon, 04 Jun 2018 07:46:16 GMT
+  # Connection: keep-alive
+  #
+  # ["a","abnormal","banana"]
+  #
+
+POST http://localhost:3001/notebooks_dict
+Content-Type: application/json; charset=utf-8
+
+{"userId":"0000000000000000000000000000"}
+
+###  HTTP/1.1 200 OK
+   # X-Powered-By: Express
+   # Content-Type: application/json; charset=utf-8
+   # Content-Length: 37
+   # ETag: W/"25-GYNnWFLHSGru06EBtI3N1HD3TR0"
+   # Date: Mon, 04 Jun 2018 07:49:17 GMT
+   # Connection: keep-alive
+   #
+   # {"a":["a","abnormal"],"b":["banana"]}
+   #
+
 ###
-
-# HTTP/1.1 200 OK
-# X-Powered-By: Express
-# Content-Type: application/json; charset=utf-8
-# Content-Length: 2
-# ETag: W/"2-l9Fw4VUO7kr8CvBlt4zaMCqXZ0w"
-# Date: Fri, 01 Jun 2018 15:02:20 GMT
-# Connection: keep-alive
-#
-# []
-#
-
 # API: PUT /notebooks/:word
 # 为openid为userId的用户将word加入生词本
 

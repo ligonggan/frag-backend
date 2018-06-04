@@ -179,6 +179,32 @@ app.post("/notebooks", (req,res)=>{
             if (error) {
                 if (error.code === "ENOENT") { // 未找到
                     res.statusCode = 200;
+                    res.json([]);
+                    res.end();
+                } else {
+                    console.log(error);
+                    res.statusCode = 500;
+                    res.end();
+                }
+            } else {
+                let words = data.toString().split('\n');
+                res.statusCode = 200;
+                res.json(words);
+                res.end();
+            }
+        });
+    }
+});
+
+// POST /notebooks_dict           openid->获得单词本内生词列表
+app.post("/notebooks_dict", (req,res)=>{
+    let params = checkFields(req,res, ["userId"]);
+    if (params !== null && checkUserId(res,params.userId)) {
+        let notebook = notebookName(params.userId);
+        fs.readFile(notebook, (error, data)=>{
+            if (error) {
+                if (error.code === "ENOENT") { // 未找到
+                    res.statusCode = 200;
                     res.json({});
                     res.end();
                 } else {
