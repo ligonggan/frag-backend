@@ -27,7 +27,7 @@ Content-Type: application/json; charset=utf-8
 
 ### 正确示例
 
-PUT http://localhost:3001/history
+PUT https://fragmentenglish.gsxab.top/history
 Content-Type: application/json; charset=utf-8
 
 {"userId":"0000000000000000000000000000","word":"an"}
