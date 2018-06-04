@@ -259,7 +259,8 @@ app.put("/notebooks/:word", (req,res)=>{
                     return;
                 }
             }
-            words.push(req.params.word).sort();
+            words.push(req.params.word);
+            words.sort();
             fs.writeFile(notebook, words.join('\n'), (error)=>{
                 if (error) {
                     console.log(error);
