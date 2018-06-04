@@ -27,10 +27,10 @@ Content-Type: application/json; charset=utf-8
 
 ### 正确示例
 
-PUT https://fragmentenglish.gsxab.top/history
+PUT http://localhost:3001/history
 Content-Type: application/json; charset=utf-8
 
-{"userId":"0000000000000000000000000000","word":"an"}
+{"userId":"0000000000000000000000000000","word":"and"}
 
 ###
 
@@ -42,9 +42,8 @@ Content-Type: application/json; charset=utf-8
 # Date: Sat, 02 Jun 2018 03:23:03 GMT
 # Connection: keep-alive
 #
-# {
-#    "msg": "created"
-# }
+# ["and","an"]
+#
 
 # API: POST /history/delete
 # 删除openid为userId的用户的历史

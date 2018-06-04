@@ -117,7 +117,8 @@ app.put("/history", (req, res)=>{
                 result_list.splice(index, 1);
             }
             result_list.unshift(params.word);
-            let result = result_list.slice(0,7).join('|');
+            result_list = result_list.slice(0,7);
+            let result = result_list.join('|');
             pool.query("REPLACE INTO history(user_id, history) values(?,?)", [params.userId, result],
                 (error, results, fields)=> {
                     if (error) {
@@ -127,7 +128,7 @@ app.put("/history", (req, res)=>{
                         return;
                     }
                     res.statusCode = 201;
-                    res.json({msg: "created"});
+                    res.json(result_list);
                     res.end();
             });
         });
