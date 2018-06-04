@@ -43,7 +43,7 @@ l0: if (params !== undefined) {
 }
 
 function checkUserId(res,userId){
-    if (!/\w{28,32}/.exec(userId)) {
+    if (!/[-\w_]{28,32}/.exec(userId)) {
         res.statusCode = 400;
         res.json({error:"INVALID_USERID"});
         res.end();
@@ -74,21 +74,26 @@ app.post("/login",(req, res)=>{
                 wx_res.on('data', function (data) {
                     const response = JSON.parse(data.toString());
                     switch (response.errcode) {
-                    case 0:
-                        res.statusCode = 200;
-                        res.json({id: "0000000000000000000000000000"});
-                        res.end();
-                        break;
-                    case 40029:
-                        res.statusCode = 401;
-                        res.json({id: "",msg:"INVALID_CODE"});
-                        res.end();
-                        break;
-                    default:
-                        res.statusCode = 401;
-                        res.json({id: "",msg:"LOGIN_FAILED",code:response.errcode});
-                        res.end();
-                        break;
+                        case undefined:
+                            res.statusCode = 200;
+                            res.json({id: response.openid});
+                            res.end();
+                            break;
+                        case 40029:
+                            res.statusCode = 401;
+                            res.json({id: "", msg: "INVALID_CODE"});
+                            res.end();
+                            break;
+                        case 40163:
+                            res.statusCode = 401;
+                            res.json({id: "", msg: "CODE_BEEN_USED"});
+                            res.end();
+                            break;
+                        default:
+                            res.statusCode = 401;
+                            res.json({id: "", msg: "LOGIN_FAILED", code: response.errcode});
+                            res.end();
+                            break;
                     }
                 });
             });
