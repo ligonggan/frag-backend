@@ -44,6 +44,7 @@ l0: if (params !== undefined) {
 
 function checkUserId(res,userId){
     if (!/[-\w_]{28,32}/.exec(userId)) {
+        console.log(userId);
         res.statusCode = 400;
         res.json({error:"INVALID_USERID"});
         res.end();
@@ -260,7 +261,7 @@ app.put("/notebooks/:word", (req,res)=>{
                 }
             }
             words.push(req.params.word);
-            words.sort();
+            words.sort((_1,_2)=>{return _1.toLowerCase().localeCompare(_2.toLowerCase());});
             fs.writeFile(notebook, words.join('\n'), (error)=>{
                 if (error) {
                     console.log(error);
