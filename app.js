@@ -296,7 +296,10 @@ app.post("/notebooks/delete/:word", (req,res)=>{
                 return;
             }
             let words = data.toString().split('\n');
-            words.splice(words.findIndex((value, index, obj)=>(value === params.word)), 1);
+            var index;
+            if ((index = words.findIndex((value, index, obj)=>(value === req.params.word))) !== -1) {
+                words.splice(index, 1);
+            }
             fs.writeFile(notebook, words.join('\n'), (error)=>{
                 if (error) {
                     console.log(error);
